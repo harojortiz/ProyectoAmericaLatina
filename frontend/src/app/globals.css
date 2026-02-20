@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --primary: #AA0F16;
+  /* Rojo Fe y Alegría Oficial */
+  --primary-foreground: #ffffff;
+  --secondary: #4a4a4a;
+  --accent: #AA0F16;
+  --nav-bg: #AA0F16;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    /* El usuario pidió fondo blanco específicamente */
+    --foreground: #1a1a1a;
+    --primary: #AA0F16;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-red-800 transition-all font-bold shadow-md uppercase tracking-wider text-xs;
+  }
+
+  .card {
+    @apply bg-white p-6 rounded-none shadow-sm border border-slate-100;
+  }
+}
+
+h1,
+h2,
+h3 {
+  color: var(--primary);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h4,
+h5,
+h6 {
+  color: #000000;
+  font-weight: 800;
+}
