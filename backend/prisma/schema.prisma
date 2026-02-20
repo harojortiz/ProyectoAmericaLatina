@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String?  @unique
+  password  String
+  fullName  String
+  role      Role     @default(DOCENTE)
+  pinCode   String?  // 6-digit PIN visible to Super Admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  staffId   String?  @unique
+  staff     Staff?   @relation(fields: [staffId], references: [id])
+  areas     Area[]   @relation("AreaLeader")
+  events    Event[]
+  posts     Post[]
+}
+
+model Staff {
+  id        String    @id @default(uuid())
+  name      String
+  title     String
+  type      StaffType
+  email     String?
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User?
+  media     Media[]
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String @unique
+  posts Post[]
+}
+
+model Area {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String
+  content     String?
+  leaderId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  leader      User?    @relation("AreaLeader", fields: [leaderId], references: [id])
+  media       Media[]
+}
+
+model Post {
+  id         String   @id @default(uuid())
+  title      String
+  content    String
+  published  Boolean  @default(false)
+  authorId   String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  media      Media[]
+  author     User     @relation(fields: [authorId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String?
+  published   Boolean  @default(false)
+  creatorId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creator     User     @relation(fields: [creatorId], references: [id])
+  media       Media[]
+}
+
+model InstitutionPage {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  section     String
+  description String?
+  content     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  media       Media[]
+}
+
+model Grade {
+  id          String   @id @default(uuid())
+  name        String
+  section     String
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  media       Media[]
+}
+
+model Media {
+  id        String           @id @default(uuid())
+  url       String
+  type      String
+  filename  String
+  title     String?
+  altText   String?
+  postId    String?
+  eventId   String?
+  areaId    String?
+  pageId    String?
+  createdAt DateTime         @default(now())
+  staffId   String?
+  gradeId   String?
+  area      Area?            @relation(fields: [areaId], references: [id])
+  event     Event?           @relation(fields: [eventId], references: [id])
+  grade     Grade?           @relation(fields: [gradeId], references: [id])
+  page      InstitutionPage? @relation(fields: [pageId], references: [id])
+  post      Post?            @relation(fields: [postId], references: [id])
+  staff     Staff?           @relation(fields: [staffId], references: [id])
+}
+
+model FAQ {
+  id        Int      @id @default(autoincrement())
+  question  String
+  answer    String
+  order     Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+}
+
+model Document {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  url         String
+  filename    String
+  category    String   // e.g., "CIRCULAR", "MANUAL", "FORMULARIO"
+  visible     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AdmissionRequest {
+  id          String   @id @default(uuid())
+  studentName String
+  parentName  String
+  grade       String
+  phone       String
+  email       String
+  status      String   @default("RECEIVED")
+  createdAt   DateTime @default(now())
+}
+
+model InstitutionSettings {
+  id             Int     @id @default(1)
+  phone          String?
+  secondaryPhone String?
+  email          String?
+  slogan         String?
+  facebookUrl    String?
+  instagramUrl   String?
+  tiktokUrl      String?
+  youtubeUrl     String?
+}
+
+enum Role {
+  SUPER_ADMIN
+  DIRECTIVO
+  DOCENTE
+  ADMINISTRATIVO
+}
+
+enum StaffType {
+  DIRECTIVO
+  DOCENTE
+  ADMINISTRATIVO
+}
