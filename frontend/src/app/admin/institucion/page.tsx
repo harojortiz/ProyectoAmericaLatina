@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { apiFetch } from '@/lib/api';
+import { apiFetch, MEDIA_URL } from '@/lib/api';
 import RichTextEditor from '@/components/RichTextEditor';
+import MediaSelector from '@/components/MediaSelector';
+import Image from 'next/image';
 
 interface InstitutionPage {
     id: string;
@@ -15,9 +17,8 @@ interface InstitutionPage {
 
 export default function GestionInstitucionPage() {
     const [pages, setPages] = useState<InstitutionPage[]>([]);
-    const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
-    const [editingPage, setEditingPage] = useState<InstitutionPage | null>(null);
+    const [showMediaFor, setShowMediaFor] = useState<{ field: string, index?: number } | null>(null);
 
     // Estado del formulario simplificado
     const [formData, setFormData] = useState({
@@ -28,8 +29,15 @@ export default function GestionInstitucionPage() {
         // Campos para Misión/Visión
         mision: '',
         vision: '',
-        // Campo para arreglo dinámico de Historia
         historia_hitos: [] as { titulo: string; texto: string }[],
+        // Campos para Home (Inicio)
+        inicio_slides: [] as { title: string; subtitle: string; image: string; tag: string }[],
+        inicio_equipo: { gesto: '', titulo: '', tituloHighlight: '', subtitulo: '', descripcion: '', statNum: '', statText: '', image: '' },
+        inicio_accesos: [
+            { icon: '🎓', perfil: 'Perfil 01', title: 'Soy Estudiante', description: '', linkText: 'Ingresar al Portal', linkHref: '/estudiantes' },
+            { icon: '👪', perfil: 'Perfil 02', title: 'Soy Acudiente', description: '', linkText: 'Gestión Familiar', linkHref: '/padres' },
+            { icon: '📝', perfil: 'Perfil 03', title: 'Busco Cupo', description: '', linkText: 'Iniciar Proceso', linkHref: '/admisiones' }
+        ],
         // Campo general para otras páginas
         general_content: ''
     });
@@ -40,12 +48,11 @@ export default function GestionInstitucionPage() {
             setPages(data);
         } catch (error) {
             console.error('Error loading pages', error);
-        } finally {
-            setLoading(false);
         }
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         loadPages();
     }, []);
 
@@ -63,6 +70,12 @@ export default function GestionInstitucionPage() {
             structuredContent = JSON.stringify({
                 hitos: formData.historia_hitos
             });
+        } else if (formData.slug === 'inicio') {
+            structuredContent = JSON.stringify({
+                slides: formData.inicio_slides,
+                equipo: formData.inicio_equipo,
+                accesos: formData.inicio_accesos
+            });
         } else {
             structuredContent = formData.general_content;
         }
@@ -79,7 +92,6 @@ export default function GestionInstitucionPage() {
                 })
             });
             setShowForm(false);
-            setEditingPage(null);
             loadPages();
         } catch (error) {
             console.error('Error saving page', error);
@@ -88,13 +100,13 @@ export default function GestionInstitucionPage() {
     };
 
     const handleEdit = (page: InstitutionPage) => {
-        setEditingPage(page);
-        let contentObj: any = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let contentObj: Record<string, any> = {};
         try {
             if (page.content?.startsWith('{')) {
                 contentObj = JSON.parse(page.content || '{}');
             }
-        } catch (e) {
+        } catch {
             console.log('Contenido no es JSON, usando como texto plano');
         }
 
@@ -106,6 +118,13 @@ export default function GestionInstitucionPage() {
             mision: contentObj.mision || '',
             vision: contentObj.vision || '',
             historia_hitos: contentObj.hitos || [],
+            inicio_slides: contentObj.slides || [],
+            inicio_equipo: contentObj.equipo || { gesto: '', titulo: '', tituloHighlight: '', subtitulo: '', descripcion: '', statNum: '', statText: '', image: '' },
+            inicio_accesos: contentObj.accesos || [
+                { icon: '🎓', perfil: 'Perfil 01', title: 'Soy Estudiante', description: '', linkText: 'Ingresar al Portal', linkHref: '/estudiantes' },
+                { icon: '👪', perfil: 'Perfil 02', title: 'Soy Acudiente', description: '', linkText: 'Gestión Familiar', linkHref: '/padres' },
+                { icon: '📝', perfil: 'Perfil 03', title: 'Busco Cupo', description: '', linkText: 'Iniciar Proceso', linkHref: '/admisiones' }
+            ],
             general_content: !page.content?.startsWith('{') ? page.content || '' : ''
         });
         setShowForm(true);
@@ -129,7 +148,7 @@ export default function GestionInstitucionPage() {
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Dinamización Institucional sin Código</p>
                 </div>
                 <button
-                    onClick={() => { setShowForm(!showForm); setEditingPage(null); setFormData({ title: '', slug: '', section: 'nosotros', description: '', mision: '', vision: '', historia_hitos: [], general_content: '' }); }}
+                    onClick={() => { setShowForm(!showForm); setFormData({ title: '', slug: '', section: 'nosotros', description: '', mision: '', vision: '', historia_hitos: [], inicio_slides: [], inicio_equipo: { gesto: '', titulo: '', tituloHighlight: '', subtitulo: '', descripcion: '', statNum: '', statText: '', image: '' }, inicio_accesos: [], general_content: '' }); }}
                     className="bg-black text-white px-8 py-4 font-black uppercase text-[10px] tracking-widest hover:bg-[#AA0F16] transition-all"
                 >
                     {showForm ? 'Cerrar' : 'Editar Secciones'}
@@ -183,7 +202,7 @@ export default function GestionInstitucionPage() {
                                 </button>
                             </div>
 
-                            {formData.historia_hitos?.map((hito: any, index: number) => (
+                            {formData.historia_hitos?.map((hito: { titulo: string; texto: string }, index: number) => (
                                 <div key={index} className="grid md:grid-cols-12 gap-8 p-8 border-2 border-slate-100 bg-slate-50/50 relative group">
                                     <button
                                         type="button"
@@ -236,8 +255,236 @@ export default function GestionInstitucionPage() {
                         </div>
                     )}
 
+                    {/* Inicio - Editor Estructurado Dinámico */}
+                    {formData.slug === 'inicio' && (
+                        <div className="space-y-16">
+                            {/* Slides Editor */}
+                            <div className="space-y-6">
+                                <div className="flex justify-between items-center border-b border-slate-200 pb-4">
+                                    <h3 className="font-black uppercase tracking-[0.3em] text-[#AA0F16] text-xs">1. Carrusel Principal (Hero)</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const newSlides = [...(formData.inicio_slides || [])];
+                                            newSlides.push({ title: '', subtitle: '', image: '', tag: '' });
+                                            setFormData({ ...formData, inicio_slides: newSlides });
+                                        }}
+                                        className="bg-black text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-[#AA0F16] transition"
+                                    >
+                                        + Agregar Diapositiva
+                                    </button>
+                                </div>
+
+                                {formData.inicio_slides?.map((slide: { title: string; subtitle: string; tag: string; image: string }, index: number) => (
+                                    <div key={index} className="grid md:grid-cols-12 gap-8 p-8 border-2 border-slate-100 bg-slate-50/50 relative">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const newSlides = formData.inicio_slides.filter((_, i) => i !== index);
+                                                setFormData({ ...formData, inicio_slides: newSlides });
+                                            }}
+                                            className="absolute top-4 right-4 text-slate-300 hover:text-red-600 transition"
+                                        >
+                                            ✕
+                                        </button>
+                                        <div className="md:col-span-8 grid grid-cols-2 gap-4">
+                                            <div className="col-span-2 space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Título Principal</label>
+                                                <input
+                                                    type="text"
+                                                    value={slide.title}
+                                                    onChange={e => {
+                                                        const newSlides = [...formData.inicio_slides];
+                                                        newSlides[index].title = e.target.value;
+                                                        setFormData({ ...formData, inicio_slides: newSlides });
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 font-bold outline-none focus:border-black text-sm"
+                                                />
+                                            </div>
+                                            <div className="col-span-2 space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Subtítulo Descriptivo</label>
+                                                <input
+                                                    type="text"
+                                                    value={slide.subtitle}
+                                                    onChange={e => {
+                                                        const newSlides = [...formData.inicio_slides];
+                                                        newSlides[index].subtitle = e.target.value;
+                                                        setFormData({ ...formData, inicio_slides: newSlides });
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 font-bold outline-none focus:border-black text-sm"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Etiqueta Sup. (Ej: ESTUDIANTES)</label>
+                                                <input
+                                                    type="text"
+                                                    value={slide.tag}
+                                                    onChange={e => {
+                                                        const newSlides = [...formData.inicio_slides];
+                                                        newSlides[index].tag = e.target.value;
+                                                        setFormData({ ...formData, inicio_slides: newSlides });
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 font-bold outline-none focus:border-black text-sm uppercase"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="md:col-span-4 flex flex-col justify-center">
+                                            {slide.image ? (
+                                                <div className="relative aspect-video rounded-lg overflow-hidden border-2 border-slate-200 group">
+                                                    <Image src={slide.image.startsWith('http') ? slide.image : `${MEDIA_URL}${slide.image}`} alt="slide" fill className="object-cover" />
+                                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <button type="button" onClick={() => setShowMediaFor({ field: 'slide', index })} className="px-4 py-2 bg-white text-black text-[10px] font-black uppercase">Cambiar FOTO</button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div onClick={() => setShowMediaFor({ field: 'slide', index })} className="aspect-video bg-white border-2 border-dashed border-slate-300 rounded-lg flex flex-col items-center justify-center text-center p-4 cursor-pointer hover:border-[#AA0F16] hover:bg-red-50 transition">
+                                                    <span className="text-[10px] font-black uppercase text-slate-400">Añadir Imagen (16:9)</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Accesos Rápidos (Solo se edita el texto y link) */}
+                            <div className="space-y-6">
+                                <h3 className="font-black uppercase tracking-[0.3em] text-[#AA0F16] text-xs border-b border-slate-200 pb-4">2. Accesos Rápidos</h3>
+                                <div className="grid md:grid-cols-3 gap-6">
+                                    {formData.inicio_accesos?.map((acceso: { perfil: string; title: string; description: string; linkText: string; linkHref: string }, index: number) => (
+                                        <div key={index} className="p-6 border-2 border-slate-100 bg-white space-y-4">
+                                            <h4 className="text-sm font-black text-black uppercase">{acceso.perfil} - {acceso.title}</h4>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Descripción Breve</label>
+                                                <textarea
+                                                    rows={3}
+                                                    value={acceso.description}
+                                                    onChange={e => {
+                                                        const newAcc = [...formData.inicio_accesos];
+                                                        newAcc[index].description = e.target.value;
+                                                        setFormData({ ...formData, inicio_accesos: newAcc });
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 text-xs font-bold outline-none focus:border-black"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Texto del Enlace</label>
+                                                <input
+                                                    type="text"
+                                                    value={acceso.linkText}
+                                                    onChange={e => {
+                                                        const newAcc = [...formData.inicio_accesos];
+                                                        newAcc[index].linkText = e.target.value;
+                                                        setFormData({ ...formData, inicio_accesos: newAcc });
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 text-xs font-bold outline-none focus:border-black uppercase"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Sección Equipo IDEAL */}
+                            <div className="space-y-6">
+                                <h3 className="font-black uppercase tracking-[0.3em] text-[#AA0F16] text-xs border-b border-slate-200 pb-4">3. Visión Educativa (Equipo IDEAL)</h3>
+                                <div className="grid md:grid-cols-2 gap-8 bg-slate-50/50 p-8 border-2 border-slate-100">
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase text-slate-400">Gesto (Línea Superior)</label>
+                                            <input
+                                                type="text"
+                                                value={formData.inicio_equipo.gesto}
+                                                onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, gesto: e.target.value } })}
+                                                className="w-full px-4 py-3 bg-white border border-slate-200 text-xs font-bold outline-none focus:border-black"
+                                                placeholder="Nuestro Gesto Institucional"
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Título</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.inicio_equipo.titulo}
+                                                    onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, titulo: e.target.value } })}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 text-xs font-bold outline-none focus:border-black"
+                                                    placeholder="Equipo"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-[#AA0F16]">Resaltado</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.inicio_equipo.tituloHighlight}
+                                                    onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, tituloHighlight: e.target.value } })}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 text-xs font-bold outline-none focus:border-[#AA0F16]"
+                                                    placeholder="IDEAL"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase text-slate-400">Subtítulo</label>
+                                            <input
+                                                type="text"
+                                                value={formData.inicio_equipo.subtitulo}
+                                                onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, subtitulo: e.target.value } })}
+                                                className="w-full px-4 py-3 bg-white border border-slate-200 text-xs font-bold outline-none focus:border-black"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase text-slate-400">Párrafo Descriptivo</label>
+                                            <textarea
+                                                rows={4}
+                                                value={formData.inicio_equipo.descripcion}
+                                                onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, descripcion: e.target.value } })}
+                                                className="w-full px-4 py-3 bg-white border border-slate-200 text-sm font-bold outline-none focus:border-black leading-relaxed"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase text-slate-400">Imagen Principal de Sección</label>
+                                            {formData.inicio_equipo.image ? (
+                                                <div className="relative aspect-square md:aspect-auto md:h-64 rounded-lg overflow-hidden border-2 border-slate-200 group">
+                                                    <Image src={formData.inicio_equipo.image.startsWith('http') ? formData.inicio_equipo.image : `${MEDIA_URL}${formData.inicio_equipo.image}`} alt="equipo" fill className="object-cover" />
+                                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <button type="button" onClick={() => setShowMediaFor({ field: 'equipo' })} className="px-4 py-2 bg-white text-black text-[10px] font-black uppercase">Cambiar IMAGEN</button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div onClick={() => setShowMediaFor({ field: 'equipo' })} className="aspect-video bg-white border-2 border-dashed border-slate-300 rounded-lg flex flex-col items-center justify-center text-center p-4 cursor-pointer hover:border-[#AA0F16] hover:bg-red-50 transition">
+                                                    <span className="text-[10px] font-black uppercase text-slate-400">Añadir Imagen Principal</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Dato (Ej. +50)</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.inicio_equipo.statNum}
+                                                    onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, statNum: e.target.value } })}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 text-xs font-black outline-none focus:border-black"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase text-slate-400">Texto del Dato</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.inicio_equipo.statText}
+                                                    onChange={e => setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, statText: e.target.value } })}
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 text-xs font-bold outline-none focus:border-black uppercase"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Editor General para otras páginas */}
-                    {formData.slug !== 'mision-vision' && formData.slug !== 'historia' && (
+                    {formData.slug !== 'mision-vision' && formData.slug !== 'historia' && formData.slug !== 'inicio' && (
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
                                 <label className="text-[10px] font-black uppercase text-slate-400">Contenido de la Página</label>
@@ -272,6 +519,21 @@ export default function GestionInstitucionPage() {
                         </div>
                     </div>
                 ))}
+                {showMediaFor && (
+                    <MediaSelector
+                        onClose={() => setShowMediaFor(null)}
+                        onSelect={(media) => {
+                            if (showMediaFor.field === 'slide' && typeof showMediaFor.index === 'number') {
+                                const newSlides = [...formData.inicio_slides];
+                                newSlides[showMediaFor.index].image = media.url;
+                                setFormData({ ...formData, inicio_slides: newSlides });
+                            } else if (showMediaFor.field === 'equipo') {
+                                setFormData({ ...formData, inicio_equipo: { ...formData.inicio_equipo, image: media.url } });
+                            }
+                            setShowMediaFor(null);
+                        }}
+                    />
+                )}
             </div>
         </div>
     );

@@ -14,7 +14,7 @@ export default function EditEventPage() {
         const fetchEvent = async () => {
             try {
                 const data = await apiFetch(`/events`);
-                const found = data.find((e: any) => e.id === id);
+                const found = data.find((e: { id: string }) => e.id === id);
                 setEvent(found);
             } catch (error) {
                 console.error('Error fetching event', error);

@@ -96,6 +96,7 @@ export default function PastoralDynamicPage() {
                         <div className="relative group">
                             <div className="absolute -inset-4 border-4 border-[#AA0F16] -z-10 transform -rotate-1 group-hover:rotate-0 transition duration-500"></div>
                             {pageData.media && pageData.media.length > 0 ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
                                 <img
                                     src={pageData.media[0].url}
                                     alt={pageData.title}

@@ -1,0 +1,165 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/admin/grados/page.tsx
+   16:12  warning  'loading' is assigned a value but never used                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   76:50  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   78:53  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  172:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  231:70  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  233:98  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/admin/institucion/page.tsx
+  20:12  warning  'loading' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  22:12  warning  'editingPage' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/admin/personal/page.tsx
+  301:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/comunidad/equipo/page.tsx
+  127:133  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  127:175  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/comunidad/page.tsx
+  89:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  89:49  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/estudiantes/page.tsx
+  81:96   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  81:153  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/orientacion/cientifico-tecnologico/page.tsx
+  24:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  38:40  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  38:63  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/orientacion/expresarte/page.tsx
+  25:33   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  25:44   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  44:29   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  59:25   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  59:113  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/orientacion/page.tsx
+   7:46  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  15:22  warning  'error' is defined but never used                                @typescript-eslint/no-unused-vars
+  59:25  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  59:97  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/page.tsx
+    7:10  warning  'PostsGridSkeleton' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   12:10  warning  'events' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   13:44  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-explicit-any
+  103:27  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/page.tsx:103:27
+  101 |       category: { name: 'Eventos' },
+  102 |       media: [{ id: 'm2', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'feria.jpg' }],
+> 103 |       createdAt: new Date(Date.now() - 86400000).toISOString()
+      |                           ^^^^^^^^^^ Cannot call impure function
+  104 |     },
+  105 |     {
+  106 |       id: 'demo-3',        react-hooks/purity
+  113:27  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/page.tsx:113:27
+  111 |       category: { name: 'Pastoral' },
+  112 |       media: [{ id: 'm3', url: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'paz.jpg' }],
+> 113 |       createdAt: new Date(Date.now() - 172800000).toISOString()
+      |                           ^^^^^^^^^^ Cannot call impure function
+  114 |     },
+  115 |     {
+  116 |       id: 'demo-4',     react-hooks/purity
+  123:27  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/page.tsx:123:27
+  121 |       category: { name: 'Deportes' },
+  122 |       media: [{ id: 'm4', url: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'futbol.jpg' }],
+> 123 |       createdAt: new Date(Date.now() - 259200000).toISOString()
+      |                           ^^^^^^^^^^ Cannot call impure function
+  124 |     },
+  125 |     {
+  126 |       id: 'demo-5',  react-hooks/purity
+  133:27  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/page.tsx:133:27
+  131 |       category: { name: 'Admisiones' },
+  132 |       media: [{ id: 'm5', url: 'https://images.unsplash.com/photo-1427504746696-ea5abd7dfe88?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'admisiones.jpg' }],
+> 133 |       createdAt: new Date(Date.now() - 345600000).toISOString()
+      |                           ^^^^^^^^^^ Cannot call impure function
+  134 |     }
+  135 |   ];
+  136 |                  react-hooks/purity
+  170:6   warning  React Hook useEffect has a missing dependency: 'DEMO_POSTS'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+  176:29  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-explicit-any
+  230:35  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/pastoral/[slug]/page.tsx
+  99:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/plan-estudio/[slug]/page.tsx
+  53:8   warning  React Hook useCallback has a missing dependency: 'mockData'. Either include it or remove the dependency array                                                                                                                                                                            react-hooks/exhaustive-deps
+  95:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/app/proyecto-transversal/page.tsx
+   7:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:22  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/EventCalendar.tsx
+  15:8  warning  React Hook useEffect has a missing dependency: 'fetchEvents'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/EventForm.tsx
+   10:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   24:56  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   55:25  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  118:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/FAQ.tsx
+  94:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/Footer.tsx
+  8:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/Navbar.tsx
+  11:13  warning  'user' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  15:46  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/PostForm.tsx
+   15:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   48:22  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   54:8   warning  React Hook useEffect has a missing dependency: 'DEMO_CATEGORIES'. Either include it or remove the dependency array                                                                                                                                                                       react-hooks/exhaustive-deps
+   57:56  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   85:25  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  141:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/RichTextEditor.tsx
+  10:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/components/ScrollReveal.tsx
+  38:40  warning  The ref value 'ref.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'ref.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/context/AuthContext.tsx
+  30:26  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/lib/api.ts
+   4:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/haroldortiz/Downloads/Nuevo Proyecto/frontend/src/types/react-quill.d.ts
+   5:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   9:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   9:74  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 66 problems (43 errors, 23 warnings)
+

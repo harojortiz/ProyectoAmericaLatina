@@ -5,25 +5,25 @@ import { Area } from '@/types';
 import { apiFetch } from '@/lib/api';
 import Link from 'next/link';
 
+// Datos mock por si la API falla o está vacía inicialmente
+const mockData: Record<string, Partial<Area>> = {
+    'castellano': {
+        name: 'Lengua Castellana',
+        description: 'Fomentamos la expression oral, escrita y el deleite por la literatura clásica y contemporánea.',
+        content: 'Nuestra metodología se basa en el análisis crítico de textos, la producción literaria creativa y el fortalecimiento de las competencias comunicativas como ejes fundamentales del desarrollo humano.',
+    },
+    'matematica': {
+        name: 'Matemática',
+        description: 'Desarrollamos el razonamiento lógico-matemático para la resolución de problemas en la vida cotidiana.',
+        content: 'Desde el cálculo hasta la geometría, buscamos que el estudiante comprenda los lenguajes numéricos como herramientas de transformación y análisis del entorno.',
+    }
+};
+
 export default function AreaPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const [area, setArea] = useState<Area | null>(null);
     const [loading, setLoading] = useState(true);
     const [currentSlide, setCurrentSlide] = useState(0);
-
-    // Datos mock por si la API falla o está vacía inicialmente
-    const mockData: Record<string, Partial<Area>> = {
-        'castellano': {
-            name: 'Lengua Castellana',
-            description: 'Fomentamos la expresión oral, escrita y el deleite por la literatura clásica y contemporánea.',
-            content: 'Nuestra metodología se basa en el análisis crítico de textos, la producción literaria creativa y el fortalecimiento de las competencias comunicativas como ejes fundamentales del desarrollo humano.',
-        },
-        'matematica': {
-            name: 'Matemática',
-            description: 'Desarrollamos el razonamiento lógico-matemático para la resolución de problemas en la vida cotidiana.',
-            content: 'Desde el cálculo hasta la geometría, buscamos que el estudiante comprenda los lenguajes numéricos como herramientas de transformación y análisis del entorno.',
-        }
-    };
 
     const fetchData = useCallback(async () => {
         try {
@@ -92,6 +92,7 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
                                 }`}
                         >
                             <div className="absolute inset-0 bg-black/40 z-10"></div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={item.url} alt={area.name} className="w-full h-full object-cover" />
                         </div>
                     ))

@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 // Importación dinámica para evitar errores de SSR (document is not defined)
 const ReactQuill = dynamic(async () => {
     const { default: RQ } = await import('react-quill-new');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Component = ({ forwardedRef, ...props }: any) => <RQ ref={forwardedRef} {...props} />;
     Component.displayName = 'ReactQuill';
     return Component;

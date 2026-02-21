@@ -21,6 +21,7 @@ export default function CientificoTecnologicoPage() {
                     <div className="grid md:grid-cols-2 gap-20 items-center">
                         <div className="order-2 md:order-1 relative">
                             <div className="absolute top-0 right-0 w-full h-full border-2 border-black -m-6 -z-10 bg-slate-50"></div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop"
                                 alt="Tecnología y Ciencia"
@@ -35,7 +36,7 @@ export default function CientificoTecnologicoPage() {
                             </div>
 
                             <p className="text-xl font-bold text-black leading-tight italic">
-                                El eje "Científico Tecnológico" de nuestra orientación escolar busca despertar la curiosidad investigativa y el uso ético de las herramientas digitales para transformar el entorno.
+                                El eje &quot;Científico Tecnológico&quot; de nuestra orientación escolar busca despertar la curiosidad investigativa y el uso ético de las herramientas digitales para transformar el entorno.
                             </p>
 
                             <div className="grid gap-6">

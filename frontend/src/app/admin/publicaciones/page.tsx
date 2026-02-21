@@ -29,8 +29,8 @@ export default function PostsAdminPage() {
         try {
             await apiFetch(`/posts/${id}`, { method: 'DELETE' });
             setPosts(posts.filter(p => p.id !== id));
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            alert(error instanceof Error ? error.message : 'Error desconocido');
         }
     };
 

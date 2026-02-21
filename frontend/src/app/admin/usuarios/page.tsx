@@ -44,8 +44,8 @@ export default function UsersAdminPage() {
             setFullName('');
             setPassword('');
             fetchUsers();
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            alert(error instanceof Error ? error.message : 'Error desconocido');
         } finally {
             setCreating(false);
         }
@@ -56,8 +56,8 @@ export default function UsersAdminPage() {
         try {
             await apiFetch(`/users/${id}`, { method: 'DELETE' });
             setUsers(users.filter(u => u.id !== id));
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            alert(error instanceof Error ? error.message : 'Error desconocido');
         }
     };
 

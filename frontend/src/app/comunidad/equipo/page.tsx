@@ -54,9 +54,9 @@ export default function EquipoHumanoPage() {
                         <div key={person.id} className="flex flex-col items-center group text-balance">
                             {/* Card Media 1:1 */}
                             <div className="w-full aspect-square rounded-3xl overflow-hidden bg-slate-50 border-2 border-slate-50 group-hover:border-[#AA0F16] transition-all duration-500 relative mb-6">
-                                {(person as any).media?.[0] ? (
+                                {(person as StaffMember & { media?: { url: string }[] }).media?.[0] ? (
                                     <Image
-                                        src={`${MEDIA_URL}${(person as any).media[0].url}`}
+                                        src={`${MEDIA_URL}${(person as StaffMember & { media?: { url: string }[] }).media?.[0]?.url}`}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         alt={person.name}
@@ -124,7 +124,7 @@ export default function EquipoHumanoPage() {
 
                     {staff.length === 0 && (
                         <div className="py-40 text-center">
-                            <p className="text-2xl font-black italic text-slate-200 uppercase tracking-tighter italic text-balance">"El corazón de nuestro colegio es su gente"</p>
+                            <p className="text-2xl font-black italic text-slate-200 uppercase tracking-tighter text-balance">&quot;El corazón de nuestro colegio es su gente&quot;</p>
                         </div>
                     )}
                 </div>

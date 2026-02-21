@@ -29,8 +29,8 @@ export default function EventsAdminPage() {
         try {
             await apiFetch(`/events/${id}`, { method: 'DELETE' });
             setEvents(events.filter(e => e.id !== id));
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            alert(error instanceof Error ? error.message : 'Error desconocido');
         }
     };
 

@@ -7,6 +7,7 @@ import RichTextEditor from './RichTextEditor';
 import MediaSelector from './MediaSelector';
 
 interface EventFormProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialData?: any;
     isEditing?: boolean;
 }
@@ -21,6 +22,7 @@ export default function EventForm({ initialData, isEditing = false }: EventFormP
 
     // Media Selector State
     const [showMediaSelector, setShowMediaSelector] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [selectedMedia, setSelectedMedia] = useState<any>(initialData?.media?.[0] || null);
 
     const router = useRouter();
@@ -52,8 +54,12 @@ export default function EventForm({ initialData, isEditing = false }: EventFormP
             }
             router.push('/admin/eventos');
             router.refresh();
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert('Ocurrió un error desconocido');
+            }
         } finally {
             setLoading(false);
         }
@@ -115,6 +121,7 @@ export default function EventForm({ initialData, isEditing = false }: EventFormP
 
                     {selectedMedia ? (
                         <div className="relative group w-full h-64 bg-slate-100 rounded-xl overflow-hidden border-2 border-slate-200">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={`${MEDIA_URL}${selectedMedia.url}`}
                                 alt={selectedMedia.altText || selectedMedia.title || 'Imagen del evento'}

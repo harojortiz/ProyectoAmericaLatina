@@ -38,6 +38,7 @@ export default function PublicNewsPage() {
                     <article key={post.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col hover:shadow-lg transition">
                         <div className="aspect-video bg-slate-100">
                             {post.media?.[0] && (
+                                /* eslint-disable-next-line @next/next/no-img-element */
                                 <img src={post.media[0].url} alt={post.title} className="w-full h-full object-cover" />
                             )}
                         </div>

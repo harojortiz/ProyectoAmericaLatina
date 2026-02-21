@@ -1,13 +1,12 @@
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
-import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    const { user, loading, isAuthenticated } = useAuth();
-    const router = useRouter();
+    const { user, isAuthenticated } = useAuth();
     const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -21,7 +20,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     // Use Demo user if auth fails (Temporary for visual check)
     const currentUser = isAuthenticated ? user : demoUser;
-    const currentIsAuth = isAuthenticated || true;
 
     // Bypass protection for Demo
     /*

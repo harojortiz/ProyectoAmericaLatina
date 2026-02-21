@@ -5,6 +5,7 @@ import { apiFetch } from '@/lib/api';
 import Link from 'next/link';
 
 export default function Footer() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [settings, setSettings] = useState<any>(null);
 
     useEffect(() => {
@@ -56,7 +57,7 @@ export default function Footer() {
                                 <li key={link.href}>
                                     <Link
                                         href={link.href}
-                                        className="text-xs text-slate-500 hover:text-[#AA0F16] transition-colors font-black uppercase tracking-widest"
+                                        className="text-xs text-slate-700 hover:text-[#AA0F16] transition-colors font-black uppercase tracking-widest"
                                     >
                                         {link.name}
                                     </Link>

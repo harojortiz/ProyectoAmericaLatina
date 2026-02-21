@@ -2,14 +2,68 @@
 
 import Link from 'next/link';
 import { useEffect, useState, useCallback } from 'react';
-import { Post, Event } from '@/types';
+import { Post } from '@/types';
 import { apiFetch, MEDIA_URL } from '@/lib/api';
-import { PostsGridSkeleton } from '@/components/SkeletonLoaders';
 import Image from 'next/image';
+
+// Datos de demostración
+const DEMO_POSTS: Post[] = [
+  {
+    id: 'demo-1',
+    title: 'Inauguración del Nuevo Laboratorio de Ciencias',
+    content: 'Gracias al apoyo de la comunidad y la gestión directiva, hoy abrimos las puertas de nuestro moderno laboratorio de biología y química, equipado con tecnología de punta para potenciar el aprendizaje científico de nuestros estudiantes.',
+    published: true,
+    author: { fullName: 'Dirección Académica', role: 'SUPER_ADMIN' },
+    category: { name: 'Infraestructura' },
+    media: [{ id: 'm1', url: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'lab.jpg' }],
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'demo-2',
+    title: 'Feria de Emprendimiento Escolar 2025',
+    content: 'Nuestros estudiantes de media técnica presentaron sus proyectos de emprendimiento ante jurados externos. Desde soluciones tecnológicas hasta productos artesanales, el talento de Fe y Alegría brilló con luz propia.',
+    published: true,
+    author: { fullName: 'Coordinación Técnica', role: 'DOCENTE' },
+    category: { name: 'Eventos' },
+    media: [{ id: 'm2', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'feria.jpg' }],
+    createdAt: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: 'demo-3',
+    title: 'Jornada de Paz y Reconciliación',
+    content: 'Toda la comunidad educativa se unió en una jornada reflexiva sobre la importancia del diálogo y la convivencia pacífica. Talleres, puestas en escena y conversatorios marcaron este día especial.',
+    published: true,
+    author: { fullName: 'Pastoral', role: 'DOCENTE' },
+    category: { name: 'Pastoral' },
+    media: [{ id: 'm3', url: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'paz.jpg' }],
+    createdAt: new Date(Date.now() - 172800000).toISOString()
+  },
+  {
+    id: 'demo-4',
+    title: 'Campeones Intercolegiados de Fútbol',
+    content: '¡Orgullo institucional! Nuestra selección masculina sub-17 se coronó campeona en los juegos intercolegiados distritales tras una emocionante final. Felicitaciones a nuestros deportistas.',
+    published: true,
+    author: { fullName: 'Deportes', role: 'DOCENTE' },
+    category: { name: 'Deportes' },
+    media: [{ id: 'm4', url: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'futbol.jpg' }],
+    createdAt: new Date(Date.now() - 259200000).toISOString()
+  },
+  {
+    id: 'demo-5',
+    title: 'Abiertas Inscripciones Año Lectivo 2026',
+    content: 'Iniciamos el proceso de admisión para nuevos estudiantes. Invitamos a las familias interesadas a acercarse a secretaría académica para conocer los requisitos y fechas clave.',
+    published: true,
+    author: { fullName: 'Secretaría', role: 'SUPER_ADMIN' },
+    category: { name: 'Admisiones' },
+    media: [{ id: 'm5', url: 'https://images.unsplash.com/photo-1427504746696-ea5abd7dfe88?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'admisiones.jpg' }],
+    createdAt: new Date(Date.now() - 345600000).toISOString()
+  }
+];
 
 export default function HomePage() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [homeData, setHomeData] = useState<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
 
@@ -22,7 +76,7 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [posts.length]);
 
-  const slides = [
+  const defaultSlides = [
     {
       title: "Promoción 2025",
       subtitle: "Liderando con Fe y Alegría",
@@ -43,6 +97,29 @@ export default function HomePage() {
     }
   ];
 
+  const slides = homeData?.slides?.length > 0 ? homeData.slides : defaultSlides;
+
+  const defaultAccesos = [
+    { icon: '🎓', perfil: 'Perfil 01', title: 'Soy Estudiante', description: 'Accede a notas, aula virtual, horarios y calendario académico.', linkText: 'Ingresar al Portal', linkHref: '/estudiantes' },
+    { icon: '👪', perfil: 'Perfil 02', title: 'Soy Acudiente', description: 'Consulta circulares, estado de cuenta, citaciones y contacto directo.', linkText: 'Gestión Familiar', linkHref: '/padres' },
+    { icon: '📝', perfil: 'Perfil 03', title: 'Busco Cupo', description: 'Conoce nuestro proyecto educativo, costos y proceso de admisión 2026.', linkText: 'Iniciar Proceso', linkHref: '/admisiones' }
+  ];
+
+  const accesos = homeData?.accesos?.length > 0 ? homeData.accesos : defaultAccesos;
+
+  const defaultEquipo = {
+    gesto: "Nuestro Gesto Institucional",
+    titulo: "Equipo",
+    tituloHighlight: "IDEAL",
+    subtitulo: "Pasión por la enseñanza y el progreso educativo",
+    descripcion: "Contamos con profesionales altamente calificados, comprometidos con los valores de Fe y Alegría para guiar a nuestros estudiantes.",
+    statNum: "+50",
+    statText: "Docentes Comprometidos",
+    image: "https://images.unsplash.com/photo-1544717297-fa15739a544e?q=80&w=2070&auto=format&fit=crop"
+  };
+
+  const equipo = homeData?.equipo || defaultEquipo;
+
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
@@ -56,65 +133,22 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [nextSlide]);
 
-  // Datos de demostración para visualización inmediata
-  const DEMO_POSTS: Post[] = [
-    {
-      id: 'demo-1',
-      title: 'Inauguración del Nuevo Laboratorio de Ciencias',
-      content: 'Gracias al apoyo de la comunidad y la gestión directiva, hoy abrimos las puertas de nuestro moderno laboratorio de biología y química, equipado con tecnología de punta para potenciar el aprendizaje científico de nuestros estudiantes.',
-      published: true,
-      author: { fullName: 'Dirección Académica', role: 'SUPER_ADMIN' },
-      category: { name: 'Infraestructura' },
-      media: [{ id: 'm1', url: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'lab.jpg' }],
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: 'demo-2',
-      title: 'Feria de Emprendimiento Escolar 2025',
-      content: 'Nuestros estudiantes de media técnica presentaron sus proyectos de emprendimiento ante jurados externos. Desde soluciones tecnológicas hasta productos artesanales, el talento de Fe y Alegría brilló con luz propia.',
-      published: true,
-      author: { fullName: 'Coordinación Técnica', role: 'DOCENTE' },
-      category: { name: 'Eventos' },
-      media: [{ id: 'm2', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'feria.jpg' }],
-      createdAt: new Date(Date.now() - 86400000).toISOString()
-    },
-    {
-      id: 'demo-3',
-      title: 'Jornada de Paz y Reconciliación',
-      content: 'Toda la comunidad educativa se unió en una jornada reflexiva sobre la importancia del diálogo y la convivencia pacífica. Talleres, puestas en escena y conversatorios marcaron este día especial.',
-      published: true,
-      author: { fullName: 'Pastoral', role: 'DOCENTE' },
-      category: { name: 'Pastoral' },
-      media: [{ id: 'm3', url: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'paz.jpg' }],
-      createdAt: new Date(Date.now() - 172800000).toISOString()
-    },
-    {
-      id: 'demo-4',
-      title: 'Campeones Intercolegiados de Fútbol',
-      content: '¡Orgullo institucional! Nuestra selección masculina sub-17 se coronó campeona en los juegos intercolegiados distritales tras una emocionante final. Felicitaciones a nuestros deportistas.',
-      published: true,
-      author: { fullName: 'Deportes', role: 'DOCENTE' },
-      category: { name: 'Deportes' },
-      media: [{ id: 'm4', url: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'futbol.jpg' }],
-      createdAt: new Date(Date.now() - 259200000).toISOString()
-    },
-    {
-      id: 'demo-5',
-      title: 'Abiertas Inscripciones Año Lectivo 2026',
-      content: 'Iniciamos el proceso de admisión para nuevos estudiantes. Invitamos a las familias interesadas a acercarse a secretaría académica para conocer los requisitos y fechas clave.',
-      published: true,
-      author: { fullName: 'Secretaría', role: 'SUPER_ADMIN' },
-      category: { name: 'Admisiones' },
-      media: [{ id: 'm5', url: 'https://images.unsplash.com/photo-1427504746696-ea5abd7dfe88?q=80&w=2000&auto=format&fit=crop', type: 'image', filename: 'admisiones.jpg' }],
-      createdAt: new Date(Date.now() - 345600000).toISOString()
-    }
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postsData = await apiFetch('/posts/public');
-        const eventsData = await apiFetch('/events/public');
+        const [postsData, , pageData] = await Promise.all([
+          apiFetch('/posts/public').catch(() => null),
+          apiFetch('/events/public').catch(() => null),
+          apiFetch('/pages/public/inicio').catch(() => null)
+        ]);
+
+        if (pageData && pageData.content) {
+          try {
+            setHomeData(JSON.parse(pageData.content));
+          } catch (e) {
+            console.error("Error parsing home data", e);
+          }
+        }
 
         // Si hay datos reales, usarlos. Si no, usar DEMO.
         if (postsData && postsData.length > 0) {
@@ -124,7 +158,6 @@ export default function HomePage() {
           setPosts(DEMO_POSTS);
         }
 
-        setEvents(eventsData.slice(0, 3));
       } catch (error) {
         console.error('Error fetching data', error);
         // En caso de error de conexión, también usar DEMO
@@ -138,7 +171,7 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen bg-white">
       {/* Hero Section con Carrusel Interactivo e Iluminado */}
       <section className="relative h-[500px] md:h-[650px] w-full overflow-hidden bg-white">
-        {slides.map((slide, index) => (
+        {slides.map((slide: { image: string, title: string, subtitle: string, tag: string }, index: number) => (
           <div
             key={index}
             className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${index === currentSlide ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
@@ -146,7 +179,7 @@ export default function HomePage() {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent z-10"></div>
             <Image
-              src={slide.image}
+              src={slide.image.startsWith('http') ? slide.image : `${MEDIA_URL}${slide.image}`}
               alt={slide.title}
               fill
               className="object-cover"
@@ -168,7 +201,7 @@ export default function HomePage() {
                   <Link href="/noticias" className="px-8 md:px-12 py-4 md:py-5 bg-[#AA0F16] text-white font-black rounded-none hover:bg-black transition uppercase tracking-widest text-[10px] md:text-sm shadow-2xl">
                     Ver Más
                   </Link>
-                  <Link href="/contacto" className="px-8 md:px-12 py-4 md:py-5 border-2 border-white text-white font-black rounded-none hover:bg-white hover:text-black transition uppercase tracking-widest text-[10px] md:text-sm backdrop-blur-sm">
+                  <Link href="/contacto" className="px-8 md:px-12 py-4 md:py-5 border-2 border-white text-white font-black rounded-none hover:bg-white hover:text-black transition uppercase tracking-widest text-[10px] md:text-sm backdrop-blur-md shadow-lg">
                     Contáctanos
                   </Link>
                 </div>
@@ -179,10 +212,10 @@ export default function HomePage() {
 
         {/* Controles del Carrusel Suavizados */}
         <div className="absolute bottom-6 md:bottom-12 right-6 md:right-12 z-30 flex gap-2 md:gap-4">
-          <button onClick={prevSlide} className="w-10 h-10 md:w-14 md:h-14 border border-white/40 text-white flex items-center justify-center hover:bg-[#AA0F16] hover:border-[#AA0F16] transition rounded-full backdrop-blur-md cursor-pointer text-sm">
+          <button onClick={prevSlide} className="w-10 h-10 md:w-14 md:h-14 border border-white/40 text-white flex items-center justify-center hover:bg-[#AA0F16] hover:border-[#AA0F16] transition rounded-full backdrop-blur-md cursor-pointer text-sm" aria-label="Diapositiva anterior">
             &larr;
           </button>
-          <button onClick={nextSlide} className="w-10 h-10 md:w-14 md:h-14 border border-white/40 text-white flex items-center justify-center hover:bg-[#AA0F16] hover:border-[#AA0F16] transition rounded-full backdrop-blur-md cursor-pointer text-sm">
+          <button onClick={nextSlide} className="w-10 h-10 md:w-14 md:h-14 border border-white/40 text-white flex items-center justify-center hover:bg-[#AA0F16] hover:border-[#AA0F16] transition rounded-full backdrop-blur-md cursor-pointer text-sm" aria-label="Diapositiva siguiente">
             &rarr;
           </button>
         </div>
@@ -192,44 +225,19 @@ export default function HomePage() {
       <section className="bg-[#AA0F16] py-12 border-b border-red-900">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 -mt-16 md:-mt-24 relative z-40">
-            {/* Estudiantes */}
-            <div className="bg-white p-6 md:p-8 shadow-2xl rounded-sm border-l-8 border-black transform transition hover:-translate-y-2 group cursor-pointer">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-3xl md:text-4xl">🎓</span>
-                <span className="text-[#AA0F16] font-black text-[10px] uppercase tracking-widest opacity-50">Perfil 01</span>
+            {accesos.map((acceso: { icon: string, perfil: string, title: string, description: string, linkText: string, linkHref: string }, idx: number) => (
+              <div key={idx} className="bg-white p-6 md:p-8 shadow-2xl rounded-sm border-l-8 border-black transform transition hover:-translate-y-2 group cursor-pointer">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-3xl md:text-4xl">{acceso.icon}</span>
+                  <span className="text-[#AA0F16] font-black text-[10px] uppercase tracking-widest opacity-50">{acceso.perfil}</span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 group-hover:text-[#AA0F16] transition-colors uppercase">{acceso.title}</h3>
+                <p className="text-slate-500 text-xs md:text-sm font-medium mb-6 leading-relaxed">{acceso.description}</p>
+                <Link href={acceso.linkHref || '#'} className="inline-flex items-center text-[10px] font-black text-black uppercase tracking-widest group-hover:underline">
+                  {acceso.linkText} <span className="ml-2 text-[#AA0F16]">&rarr;</span>
+                </Link>
               </div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 group-hover:text-[#AA0F16] transition-colors uppercase">Soy Estudiante</h3>
-              <p className="text-slate-500 text-xs md:text-sm font-medium mb-6 leading-relaxed">Accede a notas, aula virtual, horarios y calendario académico.</p>
-              <Link href="/estudiantes" className="inline-flex items-center text-[10px] font-black text-black uppercase tracking-widest group-hover:underline">
-                Ingresar al Portal <span className="ml-2 text-[#AA0F16]">&rarr;</span>
-              </Link>
-            </div>
-
-            {/* Padres */}
-            <div className="bg-white p-6 md:p-8 shadow-2xl rounded-sm border-l-8 border-black transform transition hover:-translate-y-2 group cursor-pointer">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-3xl md:text-4xl">👪</span>
-                <span className="text-[#AA0F16] font-black text-[10px] uppercase tracking-widest opacity-50">Perfil 02</span>
-              </div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 group-hover:text-[#AA0F16] transition-colors uppercase">Soy Acudiente</h3>
-              <p className="text-slate-500 text-xs md:text-sm font-medium mb-6 leading-relaxed">Consulta circulares, estado de cuenta, citaciones y contacto directo.</p>
-              <Link href="/padres" className="inline-flex items-center text-[10px] font-black text-black uppercase tracking-widest group-hover:underline">
-                Gestión Familiar <span className="ml-2 text-[#AA0F16]">&rarr;</span>
-              </Link>
-            </div>
-
-            {/* Aspirantes */}
-            <div className="bg-white p-6 md:p-8 shadow-2xl rounded-sm border-l-8 border-black transform transition hover:-translate-y-2 group cursor-pointer">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-3xl md:text-4xl">📝</span>
-                <span className="text-[#AA0F16] font-black text-[10px] uppercase tracking-widest opacity-50">Perfil 03</span>
-              </div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 group-hover:text-[#AA0F16] transition-colors uppercase">Busco Cupo</h3>
-              <p className="text-slate-500 text-xs md:text-sm font-medium mb-6 leading-relaxed">Conoce nuestro proyecto educativo, costos y proceso de admisión 2026.</p>
-              <Link href="/admisiones" className="inline-flex items-center text-[10px] font-black text-black uppercase tracking-widest group-hover:underline">
-                Iniciar Proceso <span className="ml-2 text-[#AA0F16]">&rarr;</span>
-              </Link>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -242,7 +250,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center mb-16 text-center">
             <h2 className="text-4xl md:text-5xl font-black text-[#AA0F16] uppercase tracking-tighter italic">Nuestros Pilares</h2>
-            <h4 className="text-black font-black mt-2 uppercase tracking-widest">Excelencia y Compromiso</h4>
+            <h3 className="text-black font-black mt-2 uppercase tracking-widest">Excelencia y Compromiso</h3>
             <div className="h-1.5 w-24 bg-[#AA0F16] mt-6"></div>
           </div>
 
@@ -264,7 +272,7 @@ export default function HomePage() {
                 <h3 className="font-black text-base md:text-lg text-[#AA0F16] group-hover:text-white leading-tight mb-4 uppercase tracking-tighter transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-black font-black text-[9px] md:text-[10px] uppercase opacity-40 group-hover:text-white group-hover:opacity-100 transition-all tracking-widest">
+                <p className="text-black font-black text-[9px] md:text-[10px] uppercase opacity-70 group-hover:text-white group-hover:opacity-100 transition-all tracking-widest">
                   Saber más &rarr;
                 </p>
               </Link>
@@ -278,30 +286,30 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 lg:items-center gap-16">
             <div className="space-y-8">
-              <span className="text-black font-black tracking-[0.4em] uppercase text-sm border-l-4 border-[#AA0F16] pl-4">Nuestro Gesto Institucional</span>
+              <span className="text-black font-black tracking-[0.4em] uppercase text-sm border-l-4 border-[#AA0F16] pl-4">{equipo.gesto}</span>
               <h2 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter italic leading-none text-[#AA0F16] m-0">
-                Equipo <br /> <span className="text-black">IDEAL</span>
+                {equipo.titulo} <br /> <span className="text-black">{equipo.tituloHighlight}</span>
               </h2>
-              <h4 className="text-black font-black text-lg md:text-xl uppercase tracking-tighter">Pasión por la enseñanza y el progreso educativo</h4>
+              <h3 className="text-black font-black text-lg md:text-xl uppercase tracking-tighter">{equipo.subtitulo}</h3>
               <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-lg">
-                Contamos con profesionales altamente calificados, comprometidos con los valores de Fe y Alegría para guiar a nuestros estudiantes.
+                {equipo.descripcion}
               </p>
               <div className="pt-6">
-                <Link href="/nosotros" className="px-10 py-5 bg-[#AA0F16] text-white font-black hover:bg-red-800 transition duration-300 uppercase tracking-widest text-xs inline-block">
-                  Conoce al Equipo
+                <Link href={equipo.linkHref || '/nosotros'} className="px-10 py-5 bg-[#AA0F16] text-white font-black hover:bg-red-800 transition duration-300 uppercase tracking-widest text-xs inline-block">
+                  {equipo.linkText || 'Conoce al Equipo'}
                 </Link>
               </div>
             </div>
             <div className="relative border-[8px] md:border-[16px] border-slate-50 shadow-2xl h-[300px] md:h-[500px]">
               <Image
-                src="https://images.unsplash.com/photo-1544717297-fa15739a544e?q=80&w=2070&auto=format&fit=crop"
+                src={equipo.image?.startsWith('http') ? equipo.image : `${MEDIA_URL}${equipo.image}`}
                 fill
                 className="object-cover rounded-none grayscale hover:grayscale-0 transition duration-1000"
                 alt="Personal Docente"
               />
               <div className="absolute -bottom-4 -right-4 md:-bottom-8 md:-right-8 bg-[#AA0F16] p-6 md:p-10 z-20 text-white shadow-xl">
-                <p className="text-2xl md:text-4xl font-black italic">+50</p>
-                <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest opacity-90 mt-1 md:mt-2">Docentes Comprometidos</p>
+                <p className="text-2xl md:text-4xl font-black italic">{equipo.statNum}</p>
+                <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest opacity-90 mt-1 md:mt-2">{equipo.statText}</p>
               </div>
             </div>
           </div>
@@ -404,7 +412,7 @@ export default function HomePage() {
                           <h4 className="font-bold text-slate-900 leading-tight line-clamp-2 group-hover/small:text-[#AA0F16] transition-colors mb-2">
                             {post?.title}
                           </h4>
-                          <Link href={`/noticias/${post?.id}`} className="text-[10px] font-bold text-slate-400 uppercase mt-auto">
+                          <Link href={`/noticias/${post?.id}`} className="text-[10px] font-bold text-slate-600 hover:text-[#AA0F16] transition-colors uppercase mt-auto">
                             Leer más
                           </Link>
                         </div>

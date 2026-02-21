@@ -1,6 +1,7 @@
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 export const MEDIA_URL = process.env.NEXT_PUBLIC_MEDIA_URL || 'http://localhost:3001';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function apiFetch<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
@@ -8,7 +9,7 @@ export async function apiFetch<T = any>(endpoint: string, options: RequestInit =
         'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options.headers || {}),
-    } as any;
+    } as Record<string, string>;
 
     // Don't set Content-Type if it's FormData
     if (options.body instanceof FormData) {

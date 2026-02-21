@@ -79,9 +79,10 @@ export default function GestionDocumentosPage() {
             setSelectedFile(null);
             setFormData({ title: '', description: '', category: 'CIRCULAR', visible: true });
             loadDocuments();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error saving document', error);
-            alert('Error al guardar el documento: ' + error.message);
+            const msg = error instanceof Error ? error.message : 'Error desconocido';
+            alert('Error al guardar el documento: ' + msg);
         } finally {
             setUploading(false);
         }

@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
 import { apiFetch } from '@/lib/api';
 
 export default function MisionVisionPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [pageData, setPageData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -16,7 +17,7 @@ export default function MisionVisionPage() {
                     data.structured = JSON.parse(data.content);
                 }
                 setPageData(data);
-            } catch (error) {
+            } catch {
                 console.log('Usando contenido estático por defecto');
             } finally {
                 setLoading(false);
@@ -53,8 +54,13 @@ export default function MisionVisionPage() {
                                     />
                                 </div>
                             </div>
-                            <div className="relative">
-                                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop" className="w-full aspect-square object-cover grayscale brightness-50 shadow-2xl" alt="Misión" />
+                            <div className="relative aspect-square shadow-2xl overflow-hidden">
+                                <Image
+                                    src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop"
+                                    alt="Misión"
+                                    fill
+                                    className="object-cover grayscale brightness-50"
+                                />
                             </div>
                         </div>
                     </div>

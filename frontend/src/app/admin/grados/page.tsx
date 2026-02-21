@@ -13,7 +13,6 @@ interface Grade {
 
 export default function GestionGradosPage() {
     const [grades, setGrades] = useState<Grade[]>([]);
-    const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingGrade, setEditingGrade] = useState<Grade | null>(null);
     const [formData, setFormData] = useState({
@@ -32,8 +31,6 @@ export default function GestionGradosPage() {
             setGrades(data);
         } catch (error) {
             console.error('Error loading grades', error);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -60,9 +57,9 @@ export default function GestionGradosPage() {
             setPreviewImage(null);
             setFormData({ name: '', section: 'PRIMARIA', description: '', order: '0', mediaId: '' });
             loadGrades();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error saving grade', error);
-            alert('Error al guardar el grado: ' + error.message);
+            alert('Error al guardar el grado: ' + (error instanceof Error ? error.message : 'Error desconocido'));
         }
     };
 
@@ -73,9 +70,9 @@ export default function GestionGradosPage() {
             section: grade.section,
             description: grade.description || '',
             order: grade.order.toString(),
-            mediaId: (grade as any).media?.[0]?.id || ''
+            mediaId: (grade as Grade & { media?: { id: string, url: string }[] }).media?.[0]?.id || ''
         });
-        setPreviewImage((grade as any).media?.[0]?.url || null);
+        setPreviewImage((grade as Grade & { media?: { id: string, url: string }[] }).media?.[0]?.url || null);
         setShowForm(true);
     };
 
@@ -169,7 +166,10 @@ export default function GestionGradosPage() {
                             <div className="flex items-start gap-6">
                                 <div className="w-48 h-32 bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center relative overflow-hidden group">
                                     {previewImage ? (
-                                        <img src={previewImage.startsWith('http') ? previewImage : `${MEDIA_URL}${previewImage}`} className="w-full h-full object-cover" alt="Vista previa" />
+                                        <>
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img src={previewImage.startsWith('http') ? previewImage : `${MEDIA_URL}${previewImage}`} className="w-full h-full object-cover" alt="Vista previa" />
+                                        </>
                                     ) : (
                                         <span className="text-[8px] font-black text-slate-400 uppercase text-center p-4">Sin Imagen</span>
                                     )}
@@ -228,8 +228,9 @@ export default function GestionGradosPage() {
                             <tr key={grade.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="px-8 py-4">
                                     <div className="w-20 h-12 bg-slate-100 border border-slate-200 overflow-hidden">
-                                        {(grade as any).media?.[0] ? (
-                                            <img src={`${MEDIA_URL}${(grade as any).media[0].url}`} className="w-full h-full object-cover" />
+                                        {(grade as Grade & { media?: { url: string }[] }).media?.[0] ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
+                                            <img src={`${MEDIA_URL}${(grade as Grade & { media?: { url: string }[] }).media?.[0]?.url}`} className="w-full h-full object-cover" alt="Grado" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-[8px] font-black text-slate-300 uppercase">N/A</div>
                                         )}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function NosotrosPage() {
     return (
@@ -85,11 +86,16 @@ export default function NosotrosPage() {
             {/* CTA Section - Ahora con Color Institucional y más calidez */}
             <section className="bg-[#AA0F16] py-24 text-white text-center relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1523050335392-9ae844963131?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="pattern" />
+                    <Image
+                        src="https://images.unsplash.com/photo-1523050335392-9ae844963131?q=80&w=2070&auto=format&fit=crop"
+                        alt="Fondo decorativo"
+                        fill
+                        className="object-cover"
+                    />
                 </div>
                 <div className="container mx-auto px-4 relative z-10">
                     <h3 className="text-4xl md:text-6xl font-black italic tracking-tighter mb-6 uppercase line-height-none">
-                        "Educación Popular Integral <br /> y de Calidad"
+                        &quot;Educación Popular Integral <br /> y de Calidad&quot;
                     </h3>
                     <div className="h-1 w-20 bg-white mx-auto mb-6"></div>
                     <p className="text-white/80 font-black uppercase tracking-[0.4em] text-[10px]">

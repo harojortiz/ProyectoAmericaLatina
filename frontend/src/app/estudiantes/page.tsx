@@ -78,7 +78,7 @@ export default function EstudiantesPage() {
             {/* Franja de Apoyo */}
             <section className="bg-black py-16 text-white text-center">
                 <div className="container mx-auto px-4">
-                    <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">"El aprendizaje es el único tesoro que siempre te seguirá"</h2>
+                    <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">&quot;El aprendizaje es el único tesoro que siempre te seguirá&quot;</h2>
                     <p className="text-xs font-black uppercase tracking-[0.4em] text-[#AA0F16]">#OrgulloAméricaLatina</p>
                 </div>
             </section>

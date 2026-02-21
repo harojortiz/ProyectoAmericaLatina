@@ -22,7 +22,7 @@ export default function ExpresartePage() {
                         <div className="space-y-8">
                             <h2 className="text-4xl md:text-6xl font-black text-[#AA0F16] uppercase italic tracking-tighter m-0 leading-none">Desarrollo <br /> Socioemocional</h2>
                             <p className="text-xl font-bold text-black leading-relaxed italic">
-                                "Expresarte" es un espacio diseñado para que nuestros estudiantes exploren sus emociones a través del arte, la música y la palabra. Creemos que una educación integral comienza con el autoconocimiento.
+                                &quot;Expresarte&quot; es un espacio diseñado para que nuestros estudiantes exploren sus emociones a través del arte, la música y la palabra. Creemos que una educación integral comienza con el autoconocimiento.
                             </p>
                             <div className="space-y-4">
                                 <div className="flex items-start gap-4">
@@ -41,6 +41,7 @@ export default function ExpresartePage() {
                         </div>
                         <div className="relative group">
                             <div className="absolute -inset-4 bg-[#AA0F16] -z-10 transform rotate-2 group-hover:rotate-0 transition duration-500"></div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2071&auto=format&fit=crop"
                                 alt="Arte y Expresión"
@@ -56,7 +57,7 @@ export default function ExpresartePage() {
                 <div className="container mx-auto px-4 text-center">
                     <p className="text-sm font-black uppercase tracking-[0.5em] mb-8 opacity-60">Filosofía Institucional</p>
                     <h3 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter leading-none mb-12">
-                        "Donde las palabras fallan, <br /> <span className="text-[#AA0F16]">el arte habla</span>"
+                        &quot;Donde las palabras fallan, <br /> <span className="text-[#AA0F16]">el arte habla</span>&quot;
                     </h3>
                     <div className="h-1 w-24 bg-[#AA0F16] mx-auto"></div>
                 </div>

@@ -38,6 +38,7 @@ export default function AccessibilityWidget() {
                                     onClick={decreaseFontSize}
                                     disabled={fontSize === 0}
                                     className="w-8 h-8 rounded bg-slate-100 text-slate-800 hover:bg-[#AA0F16] hover:text-white transition disabled:opacity-50 font-bold"
+                                    aria-label="Disminuir tamaño de fuente"
                                 >
                                     A-
                                 </button>
@@ -45,6 +46,7 @@ export default function AccessibilityWidget() {
                                     onClick={increaseFontSize}
                                     disabled={fontSize === 2}
                                     className="w-8 h-8 rounded bg-slate-100 text-slate-800 hover:bg-[#AA0F16] hover:text-white transition disabled:opacity-50 font-bold"
+                                    aria-label="Aumentar tamaño de fuente"
                                 >
                                     A+
                                 </button>
@@ -84,10 +86,10 @@ export default function AccessibilityWidget() {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-12 h-12 bg-[#AA0F16] hover:bg-black text-white rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-200"
-                aria-label="Abrir menú de accesibilidad"
+                aria-label={isOpen ? "Cerrar herramientas de accesibilidad" : "Abrir herramientas de accesibilidad"}
                 title="Opciones de Accesibilidad"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" />
                     <circle cx="12" cy="8" r="1.5" />
                     <path d="M9 13.5c1.5-1 3-1.5 3-1.5s1.5.5 3 1.5" />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 import { Event } from '@/types';
 
@@ -12,9 +12,10 @@ export default function EventCalendar() {
 
     useEffect(() => {
         fetchEvents();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentDate]);
 
-    const fetchEvents = async () => {
+    const fetchEvents = useCallback(async () => {
         try {
             setLoading(true);
             // En una implementación real, filtraríamos por mes/año en el backend
@@ -50,7 +51,7 @@ export default function EventCalendar() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentDate]);
 
     const getDaysInMonth = (date: Date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { apiFetch } from '@/lib/api';
 
 export default function OrientacionPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [pageData, setPageData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -12,7 +13,7 @@ export default function OrientacionPage() {
             try {
                 const data = await apiFetch('/pages/public/orientacion');
                 setPageData(data);
-            } catch (error) {
+            } catch {
                 console.log('Usando contenido estático por defecto');
             } finally {
                 setLoading(false);
@@ -56,7 +57,7 @@ export default function OrientacionPage() {
             <section className="py-20">
                 <div className="container mx-auto px-4 max-w-4xl text-center space-y-12">
                     <p className="text-3xl font-black italic text-black leading-none">
-                        "Un espacio de escucha, apoyo y crecimiento para estudiantes y familias."
+                        &quot;Un espacio de escucha, apoyo y crecimiento para estudiantes y familias.&quot;
                     </p>
                     <div className="grid md:grid-cols-2 gap-8 text-left">
                         <div className="p-10 border-2 border-slate-100 hover:border-[#AA0F16] transition group bg-white shadow-xl">

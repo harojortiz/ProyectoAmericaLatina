@@ -68,7 +68,7 @@ export default function MensajesAdminPage() {
                                 </span>
                             </div>
                             <div className="bg-slate-50 p-6 border-l-4 border-slate-200 italic text-slate-600 font-medium">
-                                "{msg.message}"
+                                &quot;{msg.message}&quot;
                             </div>
                             <div className="mt-8 flex gap-4">
                                 <button className="px-6 py-3 bg-black text-white font-black uppercase text-[9px] tracking-widest hover:bg-[#AA0F16] transition-colors">Marcar como Leído</button>

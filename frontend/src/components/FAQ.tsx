@@ -91,7 +91,7 @@ export default function FAQ() {
 
     return (
         <div className="space-y-4 max-w-3xl mx-auto">
-            {faqs.map((faq: any, index: number) => (
+            {faqs.map((faq: { question: string, answer: string }, index: number) => (
                 <FAQItem
                     key={index}
                     question={faq.question}

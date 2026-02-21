@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { apiFetch } from '@/lib/api';
 
 export default function ProyectoTransversalPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [pageData, setPageData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -12,7 +13,7 @@ export default function ProyectoTransversalPage() {
             try {
                 const data = await apiFetch('/pages/public/proyecto-transversal');
                 setPageData(data);
-            } catch (error) {
+            } catch {
                 console.log('Usando contenido estático por defecto');
             } finally {
                 setLoading(false);

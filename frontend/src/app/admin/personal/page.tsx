@@ -36,7 +36,6 @@ export default function GestionPersonalPage() {
         mediaId: ''
     });
     const [previewImage, setPreviewImage] = useState<string | null>(null);
-    const [uploading, setUploading] = useState(false);
     const [showPinModal, setShowPinModal] = useState(false);
     const [createdUserData, setCreatedUserData] = useState<{ name: string; username: string; pin: string } | null>(null);
 
@@ -88,9 +87,9 @@ export default function GestionPersonalPage() {
             setPreviewImage(null);
             setFormData({ name: '', title: '', type: 'DOCENTE', email: '', username: '', order: '0', mediaId: '' });
             loadStaff();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error saving staff member', error);
-            alert('Error al guardar el integrante: ' + error.message);
+            alert('Error al guardar el integrante: ' + (error instanceof Error ? error.message : 'Error desconocido'));
         }
     };
 
@@ -103,9 +102,9 @@ export default function GestionPersonalPage() {
             email: member.email || '',
             username: member.user?.username || '',
             order: member.order.toString(),
-            mediaId: (member as any).media?.[0]?.id || ''
+            mediaId: (member as StaffMember & { media?: { id: string, url: string }[] }).media?.[0]?.id || ''
         });
-        setPreviewImage((member as any).media?.[0]?.url || null);
+        setPreviewImage((member as StaffMember & { media?: { id: string, url: string }[] }).media?.[0]?.url || null);
         setShowForm(true);
     };
 
@@ -132,9 +131,9 @@ export default function GestionPersonalPage() {
             });
             setShowPinModal(true);
             loadStaff();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error regenerating PIN', error);
-            alert('Error al regenerar PIN: ' + error.message);
+            alert('Error al regenerar PIN: ' + (error instanceof Error ? error.message : 'Error desconocido'));
         }
     };
 
@@ -299,7 +298,10 @@ export default function GestionPersonalPage() {
                                 <div className="flex items-start gap-6">
                                     <div className="w-32 h-32 bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center relative overflow-hidden group">
                                         {previewImage ? (
-                                            <img src={previewImage.startsWith('http') ? previewImage : `${MEDIA_URL}${previewImage}`} className="w-full h-full object-cover" alt="Foto de perfil" />
+                                            <>
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={previewImage.startsWith('http') ? previewImage : `${MEDIA_URL}${previewImage}`} className="w-full h-full object-cover" alt="Foto de perfil" />
+                                            </>
                                         ) : (
                                             <span className="text-[8px] font-black text-slate-400 uppercase text-center p-4">Sin Imagen</span>
                                         )}
@@ -333,7 +335,7 @@ export default function GestionPersonalPage() {
                                 <label className="text-[10px] font-black uppercase text-slate-400">Categoría</label>
                                 <select
                                     value={formData.type}
-                                    onChange={e => setFormData({ ...formData, type: e.target.value as any })}
+                                    onChange={e => setFormData({ ...formData, type: e.target.value as StaffMember['type'] })}
                                     className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 outline-none focus:border-[#AA0F16] font-bold text-black uppercase text-xs"
                                 >
                                     <option value="DIRECTIVO">DIRECTIVO</option>
@@ -378,7 +380,7 @@ export default function GestionPersonalPage() {
                         )}
 
                         <div className="pt-4">
-                            <button type="submit" disabled={uploading} className="w-full py-5 bg-[#AA0F16] text-white font-black uppercase tracking-widest text-xs hover:bg-black transition-all disabled:opacity-50">
+                            <button type="submit" className="w-full py-5 bg-[#AA0F16] text-white font-black uppercase tracking-widest text-xs hover:bg-black transition-all">
                                 {editingStaff ? 'Actualizar Información' : 'Registrar y Crear Cuenta'}
                             </button>
                         </div>
@@ -403,8 +405,9 @@ export default function GestionPersonalPage() {
                             <tr key={member.id} className="hover:bg-slate-50/80 transition-colors group">
                                 <td className="px-8 py-6">
                                     <div className="w-14 h-14 bg-slate-100 border-2 border-slate-200 overflow-hidden shadow-sm group-hover:scale-105 transition-transform">
-                                        {(member as any).media?.[0] ? (
-                                            <img src={`${MEDIA_URL}${(member as any).media[0].url}`} className="w-full h-full object-cover" />
+                                        {(member as StaffMember & { media?: { id: string, url: string }[] }).media?.[0] ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
+                                            <img src={`${MEDIA_URL}${(member as StaffMember & { media?: { id: string, url: string }[] }).media?.[0]?.url}`} className="w-full h-full object-cover" alt="Foto personal" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-[8px] font-black text-slate-300 uppercase">Sin Foto</div>
                                         )}

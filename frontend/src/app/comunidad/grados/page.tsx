@@ -53,9 +53,9 @@ export default function GradosPage() {
                         <div key={grade.id} className="group relative">
                             {/* Card Media 16:9 for Groups */}
                             <div className="w-full aspect-video rounded-3xl overflow-hidden bg-slate-50 border-2 border-slate-50 group-hover:border-[#AA0F16] transition-all duration-500 relative mb-8 shadow-sm group-hover:shadow-2xl">
-                                {(grade as any).media?.[0] ? (
+                                {(grade as Grade & { media?: { url: string }[] }).media?.[0] ? (
                                     <Image
-                                        src={`${MEDIA_URL}${(grade as any).media[0].url}`}
+                                        src={`${MEDIA_URL}${(grade as Grade & { media?: { url: string }[] }).media?.[0]?.url}`}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         alt={grade.name}

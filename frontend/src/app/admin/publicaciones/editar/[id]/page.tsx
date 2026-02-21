@@ -14,7 +14,7 @@ export default function EditPostPage() {
         const fetchPost = async () => {
             try {
                 const data = await apiFetch(`/posts`);
-                const found = data.find((p: any) => p.id === id);
+                const found = data.find((p: { id: string }) => p.id === id);
                 setPost(found);
             } catch (error) {
                 console.error('Error fetching post', error);

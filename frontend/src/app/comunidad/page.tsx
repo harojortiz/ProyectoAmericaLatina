@@ -86,7 +86,7 @@ export default function ComunidadPage() {
             <section className="bg-black py-20 text-white">
                 <div className="container mx-auto px-4 text-center">
                     <h3 className="text-4xl md:text-6xl font-black italic tracking-tighter mb-6">
-                        "Educamos con el Corazón"
+                        &quot;Educamos con el Corazón&quot;
                     </h3>
                     <p className="text-white/80 font-bold uppercase tracking-widest text-xs">
                         Equipo IDEAL - I.E.D América Latina

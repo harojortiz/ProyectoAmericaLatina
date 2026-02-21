@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 try {
                     const userData = await apiFetch('/auth/me');
                     setUser(userData);
-                } catch (error) {
+                } catch {
                     localStorage.removeItem('token');
                     setUser(null);
                 }

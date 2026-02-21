@@ -22,7 +22,7 @@ export default function ConfiguracionAdminPage() {
         const loadSettings = async () => {
             try {
                 const data = await apiFetch('/management/settings');
-                setSettings(data || settings);
+                if (data) setSettings(data);
             } catch (error) {
                 console.error('Error loading settings', error);
             } finally {

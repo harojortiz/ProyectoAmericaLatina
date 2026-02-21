@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
 
 export default function HistoriaPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [pageData, setPageData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -17,7 +18,7 @@ export default function HistoriaPage() {
                     data.structured = JSON.parse(data.content);
                 }
                 setPageData(data);
-            } catch (error) {
+            } catch {
                 console.log('Usando contenido estático por defecto');
             } finally {
                 setLoading(false);
@@ -42,13 +43,14 @@ export default function HistoriaPage() {
 
                 <section className="py-24">
                     <div className="container mx-auto px-4 max-w-5xl">
-                        {hitos?.map((hito: any, index: number) => (
+                        {hitos?.map((hito: { titulo: string; texto: string }, index: number) => (
                             <div key={index} className={`grid md:grid-cols-2 gap-20 items-center mb-32 ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
                                 <div className={index % 2 !== 0 ? 'md:order-2 space-y-8' : 'space-y-8'}>
                                     <h2 className="text-4xl md:text-5xl font-black text-[#AA0F16] tracking-tighter m-0 uppercase italic leading-none">{hito.titulo}</h2>
                                     <div className="text-slate-600 leading-relaxed text-lg [&>p]:mb-4" dangerouslySetInnerHTML={{ __html: hito.texto }} />
                                 </div>
                                 <div className={`${index % 2 !== 0 ? 'md:order-1' : ''} relative border-[20px] border-slate-50 shadow-2xl overflow-hidden`}>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={index === 0 ? "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop" : "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop"}
                                         alt={hito.titulo}

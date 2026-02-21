@@ -12,6 +12,7 @@ interface Category {
 }
 
 interface PostFormProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialData?: any;
     isEditing?: boolean;
 }
@@ -45,15 +46,17 @@ export default function PostForm({ initialData, isEditing = false }: PostFormPro
                 } else {
                     setCategories(DEMO_CATEGORIES);
                 }
-            } catch (error) {
+            } catch {
                 console.warn('Usando categorías demo por error de conexión');
                 setCategories(DEMO_CATEGORIES);
             }
         };
         fetchCategories();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const [showMediaSelector, setShowMediaSelector] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [selectedMedia, setSelectedMedia] = useState<any>(initialData?.media?.[0] || null);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -82,8 +85,12 @@ export default function PostForm({ initialData, isEditing = false }: PostFormPro
             }
             router.push('/admin/publicaciones');
             router.refresh();
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert('Ocurrió un error');
+            }
         } finally {
             setLoading(false);
         }
@@ -138,6 +145,7 @@ export default function PostForm({ initialData, isEditing = false }: PostFormPro
 
                     {selectedMedia ? (
                         <div className="relative group w-full h-64 bg-slate-100 rounded-xl overflow-hidden border-2 border-slate-200">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={`${MEDIA_URL}${selectedMedia.url}`}
                                 alt={selectedMedia.altText || selectedMedia.title || 'Imagen de la publicación'}

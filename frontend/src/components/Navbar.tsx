@@ -8,10 +8,11 @@ import SearchBar from '@/components/SearchBar';
 import { apiFetch } from '@/lib/api';
 
 export default function Navbar() {
-    const { user, logout, isAuthenticated } = useAuth();
+    const { logout, isAuthenticated } = useAuth();
     const pathname = usePathname();
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [settings, setSettings] = useState<any>(null);
 
     useEffect(() => {
@@ -133,6 +134,7 @@ export default function Navbar() {
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className="p-2 hover:bg-black/10 transition-colors rounded-sm"
+                            aria-label={isMenuOpen ? "Cerrar menú principal" : "Abrir menú principal"}
                         >
                             {isMenuOpen ? (
                                 <span className="text-xl">✕</span>
@@ -163,6 +165,7 @@ export default function Navbar() {
                                         <button
                                             onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
                                             className="md:hidden p-4 text-white hover:bg-black/10 border-l border-white/10"
+                                            aria-label={openDropdown === item.name ? `Cerrar submenú de ${item.name}` : `Abrir submenú de ${item.name}`}
                                         >
                                             <span className={`inline-block transition-transform duration-300 ${openDropdown === item.name ? 'rotate-180' : ''}`}>▼</span>
                                         </button>
